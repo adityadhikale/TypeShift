@@ -1,17 +1,12 @@
 
-import './App.css';
+import React from "react";
 import { useState } from 'react';
+
+import './App.css';
 import './App.css';
 import Navbar from './components/Navbar';
 import Textbox from './components/Textbox';
 import Alert from './components/Alert';
-import About from './components/About';
-import React from "react";
-// import {
-//   BrowserRouter as Router,
-//   Routes,
-//   Route,
-// } from "react-router-dom";
 
 function App() {
   const [mode, setmode] = useState('light');
@@ -25,7 +20,7 @@ function App() {
     }
     else {
       setmode('light')
-      document.body.style.backgroundColor = 'white'
+      document.body.style.backgroundColor = '#E3E6E6'
       showAlert('Light mode is enable', 'success');
     }
   }
