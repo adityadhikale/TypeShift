@@ -1,51 +1,35 @@
 
 import React from "react";
 import { useState } from 'react';
+import toast from "react-hot-toast";
 
 import './App.css';
 import './App.css';
 import Navbar from './components/Navbar';
 import Textbox from './components/Textbox';
-import Alert from './components/Alert';
+import TosterProvider from "./providers/TosterProvider";
 
 function App() {
-  const [mode, setmode] = useState('light');
-  const [alert, setAlert] = useState(null);
+  const [mode, setmode] = useState('dark');
 
   const toggelmode = () => {
-    if (mode === 'light') {
-      setmode('dark');
-      document.body.style.backgroundColor = '#2F3337'
-      showAlert('Dark mode is enable', 'success');
+    if (mode === 'dark') {
+      setmode('light');
+      document.body.style.backgroundColor = '#E3E6E6'
+      toast.success('Light mode is Enable');
     }
     else {
-      setmode('light')
-      document.body.style.backgroundColor = '#E3E6E6'
-      showAlert('Light mode is enable', 'success');
+      setmode('dark')
+      document.body.style.backgroundColor = '#2F3337'
+      toast.success('Dark mode is Enable');
     }
   }
 
-  const showAlert = (message, type) => {
-    setAlert({
-      msg: message,
-      type: type
-    })
-
-    setTimeout(() => {
-      setAlert(null);
-    }, 1500)
-  }
   return (
     <>
-      {/* <Router> */}
-        <Navbar title='WildText' mode={mode} toggelmode={toggelmode} />
-        <Alert alert={alert} />
-        {/* <Routes> */}
-          {/* <Route path="/about" element={<About mode={mode} title='WildText' />} /> */}
-          {/* <Route path="/" element={<Textbox heading='Enter text below' mode={mode} showAlert={showAlert} />} /> */}
-          <Textbox heading='Enter text below' mode={mode} showAlert={showAlert} />
-        {/* </Routes> */}
-      {/* </Router> */}
+    <TosterProvider/>
+      <Navbar title='WildText' mode={mode} toggelmode={toggelmode} />
+      <Textbox heading='Enter text below' mode={mode}  />
     </>
   );
 }
