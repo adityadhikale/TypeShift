@@ -107,13 +107,12 @@ export default function Textbox(props) {
                     <Icon icon="ri:delete-bin-6-line" style={{ color: 'white', height: '25px', width: '20px' }} /> Clear
                 </button>
                 <button disabled={text.length === 0} className="btn btn-secondary mx-1 my-1" onClick={undo}>
-                    {/* <Icon icon="fa-solid:undo" style={{ color: 'white', height: '15px', width: '16px' }} /> Undo */}
                     <Icon icon="ic:round-undo"  style={{color: 'white', height: '20px', width: '21px'}} /> Undo
                 </button>
             </div>
             <div className="container" style={{ color: props.mode === 'dark' ? 'white' : 'black' }}>
                 <div>
-                    <h2 className='my-3'>Your Text Summary</h2>
+                    <h3 className='my-3'>Your Text Summary</h3>
                     <p>Words - {text.split(/\s+/).filter((element) => element.length !== 0).length}<br />Characters - {text.length}</p>
                 </div>
                 <hr />

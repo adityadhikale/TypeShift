@@ -21,10 +21,9 @@ export default function Navbar(props) {
           <div className={`form-check form-switch toggle-btn container-fluid text-${props.mode === 'dark' ? 'light' : 'dark'}`}>
             <button type="button" className={`btn mx-1 ${props.mode === 'dark' ? 'btn-dark' : 'btn-light'}`} onClick={props.toggelmode}>
               {
-                props.mode === 'dark' ? (<Icon icon="tdesign:mode-dark" style={{ color: 'white', height:'28px',width:'20px' }} />) : (<Icon icon="material-symbols:light-mode-outline" style={{ color: 'black' ,height:'28px',width:'20px' }} />)
+                props.mode === 'dark' ? (<Icon icon="material-symbols:light-mode-outline" style={{ color: 'white' ,height:'28px',width:'20px' }} />) : (<Icon icon="tdesign:mode-dark" style={{ color: 'black', height:'28px',width:'20px' }} />)
               }
             </button>
-            <label className="form-check-label ipad-display-none" >{props.mode === 'dark' ? 'Dark' : 'Light'} mode</label>
           </div>
         </div>
       </nav>
