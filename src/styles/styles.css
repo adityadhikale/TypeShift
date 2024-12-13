@@ -1,0 +1,69 @@
+
+.logo{
+    width: 30px;
+    height: 26px;
+    margin: 0 13px;
+}
+
+.text-white::placeholder{
+    color: white;
+    opacity: 0.5;
+}
+
+.text-black::placeholder{
+    color: black;
+    opacity: 0.5;
+}
+
+
+@media (max-width: 768px) {
+    .toggle-btn{
+        margin: 10px 0px;
+    }
+}
+
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+    .toggle-btn{
+        margin: 10px 50px;
+    }
+
+    .ipad-display-none{
+        display: none;
+    }
+}
+
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+    .toggle-btn{
+        margin: 10px 50px;
+    }
+
+    .ipad-display-none{
+        display: none;
+    }
+}
+
+/* Ensure the page uses the full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Root container styles */
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures it takes full viewport height */
+}
+
+/* Footer styles */
+footer {
+    background-color: var(--footer-bg-color);
+    color: white;
+    padding: 0px 20px;
+    text-align: center;
+    margin-top: auto; /* Pushes the footer to the bottom */
+}
+
