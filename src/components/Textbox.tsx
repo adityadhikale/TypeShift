@@ -118,7 +118,6 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
             Characters: {text.length}<br />
             Sentences: {text.split(/[.!?]/).filter(Boolean).length}<br />
             Average Word Length: {text.split(/\s+/).filter(Boolean).length ? (text.replace(/\s+/g, '').length / text.split(/\s+/).filter(Boolean).length).toFixed(2) : 0}<br />
-            Estimated Reading Time: {Math.ceil(text.split(/\s+/).filter(Boolean).length / 250)} min<br />
             Average Sentence Length: {text.split(/[.!?]/).filter(Boolean).length ? (text.split(/[.!?]/).filter(Boolean).reduce((acc, sentence) => acc + sentence.split(/\s+/).filter(Boolean).length, 0) / text.split(/[.!?]/).filter(Boolean).length).toFixed(2) : 0} words
           </p>
         </div>
