@@ -44,7 +44,7 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
   };
 
   const capitalise = () => {
-    let newText = text.replace(/(?:^|\.\s|\!\s|\?\s|\,\s|\:\s|\;\s)([a-z])/g, (match, p1) => p1.toUpperCase());
+    let newText = text.replace(/(?:^|\.\s|\!\s|\?\s|\,\s|\:\s|\;\s)([a-z])/g, (p1) => p1.toUpperCase());
     newText = newText.charAt(0).toUpperCase() + newText.slice(1);
     setText(newText);
     toast.success('Capitalised');
