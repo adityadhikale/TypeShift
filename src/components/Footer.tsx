@@ -15,7 +15,7 @@ const Footer: React.FC<FooterProps> = ({ mode }) => {
                     color: mode === 'dark' ? '#ededed' : 'inherit'
                 }}
             >
-                Made with {mode === 'dark' ? '🤍' : '🖤'} by{' '}
+                Built with {mode === 'dark' ? '🤍' : '🖤'} by{' '}
                 <span style={{ marginLeft: '0.5rem' }}>
                     <a
                         href="https://github.com/adityadhikale"
