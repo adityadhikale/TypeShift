@@ -24,6 +24,7 @@ const TosterProvider: React.FC<TosterProviderProps> = ({ mode }) => {
                     borderRadius: '8px',
                     fontWeight: '500',
                     pointerEvents: 'auto',
+                    animation: 'toast-enter 0.3s cubic-bezier(0.21, 1.02, 0.73, 1)',
                 },
                 className: '',
                 loading: {
@@ -45,12 +46,6 @@ const TosterProvider: React.FC<TosterProviderProps> = ({ mode }) => {
                     },
                 },
                 duration: 3000,
-                // Add custom animations for smoother transitions
-                custom: {
-                    css: {
-                        animation: 'toast-enter 0.3s cubic-bezier(0.21, 1.02, 0.73, 1)',
-                    },
-                },
             }}
         />
     )
