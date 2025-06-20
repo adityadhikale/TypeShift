@@ -26,7 +26,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      <TosterProvider />
+      <TosterProvider mode={mode} />
       <Navbar title="WildText" mode={mode} toggleMode={toggleMode} />
       <Textbox heading="Enter text below" mode={mode} />
       <Footer mode={mode} />

@@ -1,3 +1,45 @@
+/* Root variables for theme transitions */
+:root {
+    --theme-transition-duration: 0.3s;
+    --theme-transition-timing: ease;
+}
+
+/* Global theme transition */
+* {
+    transition: background-color var(--theme-transition-duration) var(--theme-transition-timing),
+                color var(--theme-transition-duration) var(--theme-transition-timing),
+                border-color var(--theme-transition-duration) var(--theme-transition-timing),
+                box-shadow var(--theme-transition-duration) var(--theme-transition-timing);
+}
+
+/* Heart animation */
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.heart-icon {
+    display: inline-block;
+    color: #dc3545;
+    animation: heartbeat 1.5s ease infinite;
+    transform-origin: center;
+}
+
+/* Formatting section styles */
+.formatting-section {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.formatting-section h2,
+.formatting-section h3 {
+    margin-bottom: 1rem;
+    width: 100%;
+}
 
 .logo{
     width: 30px;
@@ -58,12 +100,364 @@ html, body {
     min-height: 100vh; /* Ensures it takes full viewport height */
 }
 
-/* Footer styles */
-footer {
-    background-color: var(--footer-bg-color);
-    color: white;
-    padding: 0px 20px;
-    text-align: center;
-    margin-top: auto; /* Pushes the footer to the bottom */
+/* Main content container */
+.container {
+    flex: 1 0 auto; /* Ensures the container takes available space, pushing footer down */
 }
 
+/* Footer styles */
+footer {
+    width: 100%;
+    margin-top: auto; /* Pushes the footer to the bottom */
+    padding: 0.75rem 0;
+    text-align: center;
+    flex-shrink: 0; /* Prevents footer from shrinking */
+}
+
+/* Preview container styles */
+.preview-container {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    overflow-y: auto;
+    max-height: 40vh; /* Makes long content scrollable */
+    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    white-space: pre-wrap; /* Preserves whitespace and line breaks */
+    word-wrap: break-word; /* Ensures long words don't overflow */
+}
+
+/* Dark mode adjustments for preview container */
+.dark-mode .preview-container {
+    border-color: rgba(255, 255, 255, 0.125);
+    background-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Summary card styles */
+.summary-card {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.5rem;
+    padding: 0.5rem; /* Reduced padding */
+    text-align: center;
+    margin-bottom: 0.5rem; /* Reduced margin */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-height: 80px; /* Limit height */
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.summary-card h6 {
+    margin-bottom: 0.25rem; /* Reduced margin */
+    font-weight: 600;
+    color: #6c757d;
+    font-size: 0.85rem; /* Smaller heading */
+}
+
+/* Dark mode adjustments for summary cards */
+.dark-mode .summary-card {
+    border-color: rgba(255, 255, 255, 0.125);
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .summary-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .summary-card h6 {
+    color: #dee2e6; /* Lighter color for better visibility */
+}
+
+/* Button group spacing - Enhanced */
+.format-btn-group {
+    margin: 0.5rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    width: auto;
+    border-radius: 0.25rem;
+    overflow: visible;
+    position: relative;
+}
+/* Format section specific styles */
+.format-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the start */
+    margin-bottom: 2.5rem;
+    width: 100%;
+}
+
+.format-section h3,
+.format-section h4 {
+    display: block; /* Ensure block-level display */
+    width: 100%;
+    margin-bottom: 1.25rem; /* Increased spacing between heading and buttons */
+    font-weight: 600;
+    color: var(--bs-heading-color, inherit);
+    text-align: left;
+}
+
+/* Button group container within format section */
+.format-section .format-btn-group {
+    width: auto;
+    margin-top: 0; /* Remove top margin as heading provides space */
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+/* Ensure format sections are stacked */
+.format-section + .format-section {
+    margin-top: 2rem;
+}
+
+/* Ensure proper text alignment */
+.formatting-section h2 {
+    text-align: left;
+    width: 100%;
+}
+
+.format-btn-group .btn {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    white-space: nowrap;
+    min-width: fit-content;
+    flex: 0 1 auto;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    position: relative;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    z-index: 1;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.format-btn-group .btn:hover {
+    transform: translateY(-1px);
+    z-index: 2;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.format-btn-group .btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .format-btn-group {
+}
+
+.dark-mode .format-btn-group .btn {
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Textarea styling enhancements */
+/* Update existing transitions to use variables */
+.form-control {
+    transition: background-color var(--theme-transition-duration) var(--theme-transition-timing);
+}
+
+.dark-mode .form-control {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark-mode .form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Navbar styles */
+.nav-animated {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1000;
+}
+/* Add shadow on scroll effect */
+.nav-scrolled {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.logo-hover {
+    display: flex;
+    align-items: center;
+}
+
+.brand-text {
+    position: relative;
+    padding: 2px 0;
+}
+.theme-toggle-btn {
+    transition: transform 0.2s ease, background-color var(--theme-transition-duration) var(--theme-transition-timing);
+    border-radius: 50% !important;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.theme-toggle-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+}
+
+.theme-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+.theme-icon {
+    height: 24px;
+    width: 24px;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.3));
+}
+.custom-toggler {
+    position: relative;
+    overflow: hidden;
+}
+
+.custom-toggler:hover {
+    opacity: 0.9;
+}
+.heading-animated {
+    position: relative;
+    display: inline-block;
+    padding: 2px 4px;
+    margin: -2px -4px;
+    border-radius: 4px;
+}
+
+.heading-animated:hover {
+    color: var(--bs-primary);
+}
+
+.dark-mode .heading-animated:hover {
+    color: #6ea8fe;
+}
+
+/* File operations styling - Enhanced */
+.file-operations-group {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 1rem;
+}
+
+.file-btn {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color var(--theme-transition-duration) var(--theme-transition-timing);
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: none;
+    position: relative;
+    z-index: 1;
+}
+
+.file-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    color: #fff;
+    background-color: #007bff;
+}
+
+.file-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.file-btn-container {
+    position: relative;
+}
+
+.file-icon {
+    position: relative;
+    z-index: 2;
+}
+
+.file-btn span {
+    position: relative;
+    z-index: 2;
+}
+
+.dropdown-menu {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* Mobile touch feedback */
+@media (max-width: 768px) {
+    .file-btn, .format-btn-group .btn, .theme-toggle-btn, .navbar-brand {
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Make formatting buttons more touch-friendly on small screens while keeping compact */
+    .format-btn-group .btn {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.8rem;
+        min-height: 30px;       /* Ensure minimum touch target size */
+    }
+    
+    .format-btn-group .btn .file-icon {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .dropdown-menu {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    
+    .file-btn:active, .format-btn-group .btn:active, .theme-toggle-btn:active {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .dark-mode .file-btn:active, .dark-mode .format-btn-group .btn:active, .dark-mode .theme-toggle-btn:active {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+}
+
+.dropdown-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.dark-mode .dropdown-item:hover {
+    background-color: transparent;
+}
+
+/* Enhanced theme transitions for dark mode elements */
+.dark-mode .preview-container,
+.dark-mode .summary-card,
+.dark-mode .form-control,
+.dark-mode .btn,
+.dark-mode .navbar,
+.dark-mode .dropdown-menu {
+    transition: all var(--theme-transition-duration) var(--theme-transition-timing);
+}

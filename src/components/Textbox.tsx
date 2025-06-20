@@ -3,6 +3,21 @@ import toast from 'react-hot-toast';
 import { Icon } from "@iconify/react";
 import '../styles/styles.css';
 
+// Summary Card Component
+interface SummaryCardProps {
+  title: string;
+  value: string | number;
+}
+
+const SummaryCard: React.FC<SummaryCardProps> = ({ title, value }) => {
+  return (
+    <div className={`summary-card`}>
+      <h6>{title}</h6>
+      <p className="mb-0 fw-bold fs-6">{value}</p> {/* Reduced font size from fs-5 to fs-6 */}
+    </div>
+  );
+};
+
 // Define the types for props
 interface TextboxProps {
   heading: string;
@@ -72,11 +87,11 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
     toast.success('Converted to Lowercase');
   };
 
-  const capitalise = () => {
+  const sentenceCase = () => {
     let newText = text.replace(/(?:^|\.\s|\!\s|\?\s|\,\s|\:\s|\;\s)([a-z])/g, (p1) => p1.toUpperCase());
     newText = newText.charAt(0).toUpperCase() + newText.slice(1);
     setText(newText);
-    toast.success('Capitalised');
+    toast.success('Applied Sentence Case');
   };
 
   const clearText = () => {
@@ -125,25 +140,55 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
       <div className="container my-1" style={{ color: mode === 'dark' ? 'white' : 'black' }}>
         {/* Import and Export Buttons */}
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-          <label className="form-label my-3">{heading}</label>
-          {/* Import and Export Buttons */}
-          <div>
-            <button className="btn btn-secondary mx-1 my-1">
-              <label htmlFor="file-input" style={{ cursor: 'pointer' }}>
-                <Icon icon="mdi:file-import" className="me-1" width="20" height="20" /> Import .txt
-              </label>
-              <input
-                type="file"
-                id="file-input"
-                accept=".txt,.md"
-                style={{ display: 'none' }}
-                onChange={importFile}
-              />
-            </button>
-
-            <button className="btn btn-secondary mx-1 my-1" onClick={() => exportAsFile('txt')} disabled={text.length === 0}>
-              <Icon icon="mdi:file-document" className="me-1" width="20" height="20" /> Export as .txt
-            </button>
+          <label className="form-label my-3 heading-animated">{heading}</label>
+          
+          {/* File Operations Group */}
+          <div className="mb-3">
+            <h6 className={`mb-2 ${mode === 'dark' ? 'text-light' : 'text-muted'} heading-animated`}>File Operations</h6>
+            <div className="file-operations-group">
+              {/* Import Button */}
+              <button className="btn btn-primary file-btn" aria-label="Import text file">
+                <label htmlFor="file-input" style={{ cursor: 'pointer', margin: 0, display: 'flex', alignItems: 'center' }}>
+                  <Icon icon="mdi:file-import" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> 
+                  <span>Import</span>
+                </label>
+                <input
+                  type="file"
+                  id="file-input"
+                  accept=".txt,.md"
+                  style={{ display: 'none' }}
+                  onChange={importFile}
+                />
+              </button>
+              
+              {/* Export Button */}
+              <div className="dropdown file-btn-container">
+                <button 
+                  className="btn btn-primary file-btn dropdown-toggle" 
+                  type="button" 
+                  id="exportDropdown" 
+                  data-bs-toggle="dropdown" 
+                  aria-expanded="false"
+                  disabled={text.length === 0}
+                  aria-label="Export text file options"
+                >
+                  <Icon icon="mdi:file-export" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> 
+                  <span>Export</span>
+                </button>
+                <ul className="dropdown-menu" aria-labelledby="exportDropdown">
+                  <li>
+                    <button className="dropdown-item" onClick={() => exportAsFile('txt')} disabled={text.length === 0} aria-label="Export as text file">
+                      <Icon icon="mdi:file-document" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> As .txt
+                    </button>
+                  </li>
+                  <li>
+                    <button className="dropdown-item" onClick={() => exportAsFile('md')} disabled={text.length === 0} aria-label="Export as markdown file">
+                      <Icon icon="mdi:language-markdown" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> As .md
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
         <div className="mb-3">
@@ -159,68 +204,118 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
         </div>
 
         {/* Formatting Options */}
-        <h4>Formatting Options</h4>
-        <button className="btn btn-primary mx-1 my-1" onClick={capitalise}>
-          <Icon icon="mdi:format-letter-case" className="me-1" /> Capitalise
-        </button>
-
-        <button className="btn btn-primary mx-1 my-1" onClick={upperCase}>
-          <Icon icon="mdi:format-uppercase" className="me-1" /> Upper Case
-        </button>
-
-        <button className="btn btn-primary mx-1 my-1" onClick={lowerCase}>
-          <Icon icon="mdi:format-lowercase" className="me-1" /> Lower Case
-        </button>
-
-        <button className="btn btn-primary mx-1 my-1" onClick={removeExtraSpaces}>
-          <Icon icon="mdi:format-horizontal-align-center" className="me-1" /> Remove Extra Spaces
-        </button>
-
-        <button className="btn btn-primary mx-1 my-1" onClick={removePara}>
-          <Icon icon="mdi:format-align-justify" className="me-1" /> Make one Paragraph
-        </button>
-
-        <button className="btn btn-primary mx-1 my-1" onClick={sortTextLines}>
-          <Icon icon="mdi:sort-alphabetical-ascending" className="me-1" /> Sort Text Line
-        </button>
-
-        <button className="btn btn-primary mx-1 my-1" onClick={makeList}>
-          <Icon icon="mdi:format-list-numbered" className="me-1" /> Make List
-        </button>
-
-        {/* Copy, Clear, Undo buttons */}
-        <button disabled={text.length === 0} className="btn btn-success mx-1 my-1" onClick={copyText}>
-          <Icon icon="solar:copy-linear" className="me-1" width="20" height="20" /> Copy
-        </button>
-
-        <button disabled={text.length === 0} className="btn btn-danger mx-1 my-1" onClick={clearText}>
-          <Icon icon="ri:delete-bin-6-line" className="me-1" width="20" height="20" /> Clear
-        </button>
-
-        <button disabled={text.length === 0} className="btn btn-secondary mx-1 my-1" onClick={undo}>
-          <Icon icon="ic:round-undo" className="me-1" width="20" height="20" /> Undo
-        </button>
+        <h4 className="mb-3 heading-animated">Formatting Options</h4>
+        
+        {/* Group 1: Case Transformation */}
+        <div className="mb-3">
+          <h6 className={`mb-2 ${mode === 'dark' ? 'text-light' : 'text-muted'} heading-animated`}>Case Transformation</h6>
+          <div className="btn-group format-btn-group">
+            <button className="btn btn-primary" onClick={upperCase} aria-label="Convert to uppercase">
+              <Icon icon="mdi:format-uppercase" className="me-1 file-icon" aria-hidden="true" /> Upper Case
+            </button>
+            <button className="btn btn-primary" onClick={lowerCase} aria-label="Convert to lowercase">
+              <Icon icon="mdi:format-lowercase" className="me-1 file-icon" aria-hidden="true" /> Lower Case
+            </button>
+            <button className="btn btn-primary" onClick={sentenceCase} aria-label="Apply sentence case">
+              <Icon icon="mdi:format-letter-case" className="me-1 file-icon" aria-hidden="true" /> Sentence Case
+            </button>
+          </div>
+        </div>
+        
+        {/* Group 2: Text Manipulation */}
+        <div className="mb-3">
+          <h6 className={`mb-2 ${mode === 'dark' ? 'text-light' : 'text-muted'} heading-animated`}>Text Manipulation</h6>
+          <div className="btn-group format-btn-group">
+            <button className="btn btn-primary" onClick={removeExtraSpaces} aria-label="Remove extra spaces">
+              <Icon icon="mdi:format-horizontal-align-center" className="me-1 file-icon" aria-hidden="true" /> Remove Spaces
+            </button>
+            <button className="btn btn-primary" onClick={removePara} aria-label="Make one paragraph">
+              <Icon icon="mdi:format-align-justify" className="me-1 file-icon" aria-hidden="true" /> One Paragraph
+            </button>
+          </div>
+          
+          <div className="btn-group format-btn-group">
+            <button className="btn btn-primary" onClick={sortTextLines} aria-label="Sort lines alphabetically">
+              <Icon icon="mdi:sort-alphabetical-ascending" className="me-1 file-icon" aria-hidden="true" /> Sort Lines
+            </button>
+            <button className="btn btn-primary" onClick={makeList} aria-label="Create numbered list">
+              <Icon icon="mdi:format-list-numbered" className="me-1 file-icon" aria-hidden="true" /> Make List
+            </button>
+          </div>
+        </div>
+        
+        {/* Group 3: Utility Actions */}
+        <div className="mb-3">
+          <h6 className={`mb-2 ${mode === 'dark' ? 'text-light' : 'text-muted'} heading-animated`}>Utility Actions</h6>
+          <div className="btn-group format-btn-group">
+            <button disabled={text.length === 0} className="btn btn-success" onClick={copyText} aria-label="Copy text">
+              <Icon icon="solar:copy-linear" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> Copy
+            </button>
+            <button disabled={text.length === 0} className="btn btn-danger" onClick={clearText} aria-label="Clear text">
+              <Icon icon="ri:delete-bin-6-line" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> Clear
+            </button>
+            <button disabled={text.length === 0} className="btn btn-secondary" onClick={undo} aria-label="Undo last action">
+              <Icon icon="ic:round-undo" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> Undo
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Text Summary and Preview */}
       <div className="container" style={{ color: mode === 'dark' ? 'white' : 'black' }}>
         <hr />
-        <h4 className="my-3">Your Text Summary</h4>
-        <p>
-          Words: {text.split(/\s+/).filter((element) => element.length !== 0).length}<br />
-          Characters: {text.length}<br />
-          Sentences: {text.split(/[.!?]/).filter(Boolean).length}<br />
-          Lines: {text.split('\n').filter(line => line.trim() !== '').length}<br />
-          Average Word Length: {text.split(/\s+/).filter(Boolean).length ? (text.replace(/\s+/g, '').length / text.split(/\s+/).filter(Boolean).length).toFixed(2) : 0}<br />
-          Average Sentence Length: {text.split(/[.!?]/).filter(Boolean).length ? (text.split(/[.!?]/).filter(Boolean).reduce((acc, sentence) => acc + sentence.split(/\s+/).filter(Boolean).length, 0) / text.split(/[.!?]/).filter(Boolean).length).toFixed(2) : 0} words
-        </p>
-
-        <hr />
-        <h4>Preview</h4>
-        <div>
-          <p>{text.length > 0 ? text : 'Nothing to preview.'}</p>
+        <h4 className="my-3 heading-animated">Your Text Summary</h4>
+        
+        {/* Grid layout for summary statistics */}
+        <div className={`row row-cols-2 row-cols-md-3 g-2 ${mode === 'dark' ? 'dark-mode' : ''}`}>
+          <div className="col">
+            <SummaryCard 
+              title="Words" 
+              value={text.split(/\s+/).filter((element) => element.length !== 0).length} 
+            />
+          </div>
+          <div className="col">
+            <SummaryCard 
+              title="Characters" 
+              value={text.length} 
+            />
+          </div>
+          <div className="col">
+            <SummaryCard 
+              title="Sentences" 
+              value={text.split(/[.!?]/).filter(Boolean).length} 
+            />
+          </div>
+          <div className="col">
+            <SummaryCard 
+              title="Lines" 
+              value={text.split('\n').filter(line => line.trim() !== '').length} 
+            />
+          </div>
+          <div className="col">
+            <SummaryCard 
+              title="Avg Word Length" 
+              value={text.split(/\s+/).filter(Boolean).length ? 
+                (text.replace(/\s+/g, '').length / text.split(/\s+/).filter(Boolean).length).toFixed(2) : 
+                "0"} 
+            />
+          </div>
+          <div className="col">
+            <SummaryCard 
+              title="Avg Sentence Length" 
+              value={text.split(/[.!?]/).filter(Boolean).length ? 
+                (text.split(/[.!?]/).filter(Boolean).reduce((acc, sentence) => acc + sentence.split(/\s+/).filter(Boolean).length, 0) / text.split(/[.!?]/).filter(Boolean).length).toFixed(2) + " words" : 
+                "0 words"} 
+            />
+          </div>
         </div>
-        <hr />
+
+        <hr className="my-4" />
+        <h4 className="mb-3 heading-animated">Preview</h4>
+        <div className={`preview-container ${mode === 'dark' ? 'dark-mode' : ''}`}>
+          {text.length > 0 ? text : 'Nothing to preview.'}
+        </div>
+        <hr className="my-4" />
       </div>
     </>
   );
