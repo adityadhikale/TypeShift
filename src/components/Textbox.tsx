@@ -149,7 +149,7 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
               {/* Import Button */}
               <button className="btn btn-primary file-btn" aria-label="Import text file">
                 <label htmlFor="file-input" style={{ cursor: 'pointer', margin: 0, display: 'flex', alignItems: 'center' }}>
-                  <Icon icon="mdi:file-import" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> 
+                  <Icon icon="mdi:file-import" className="me-1 file-icon" aria-hidden="true" /> 
                   <span>Import</span>
                 </label>
                 <input
@@ -206,19 +206,38 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
         {/* Formatting Options */}
         <h4 className="mb-3 heading-animated">Formatting Options</h4>
         
-        {/* Group 1: Case Transformation */}
+        {/* Group 1: Case Transformation (Desktop: with Utility Actions, Mobile: standalone) */}
         <div className="mb-3">
-          <h6 className={`mb-2 ${mode === 'dark' ? 'text-light' : 'text-muted'} heading-animated`}>Case Transformation</h6>
-          <div className="btn-group format-btn-group">
-            <button className="btn btn-primary" onClick={upperCase} aria-label="Convert to uppercase">
-              <Icon icon="mdi:format-uppercase" className="me-1 file-icon" aria-hidden="true" /> Upper Case
-            </button>
-            <button className="btn btn-primary" onClick={lowerCase} aria-label="Convert to lowercase">
-              <Icon icon="mdi:format-lowercase" className="me-1 file-icon" aria-hidden="true" /> Lower Case
-            </button>
-            <button className="btn btn-primary" onClick={sentenceCase} aria-label="Apply sentence case">
-              <Icon icon="mdi:format-letter-case" className="me-1 file-icon" aria-hidden="true" /> Sentence Case
-            </button>
+          <div className="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center mb-2">
+            <h6 className={`mb-2 mb-lg-0 ${mode === 'dark' ? 'text-light' : 'text-muted'} heading-animated`}>Case Transformation</h6>
+            <h6 className={`mb-2 mb-lg-0 d-none d-lg-block ${mode === 'dark' ? 'text-light' : 'text-muted'} heading-animated`}>Utility Actions</h6>
+          </div>
+          <div className="d-flex flex-column flex-lg-row justify-content-between gap-3">
+            {/* Case Transformation buttons */}
+            <div className="btn-group format-btn-group flex-wrap">
+              <button className="btn btn-primary" onClick={upperCase} aria-label="Convert to uppercase">
+                <Icon icon="mdi:format-uppercase" className="me-1 file-icon" aria-hidden="true" /> Upper Case
+              </button>
+              <button className="btn btn-primary" onClick={lowerCase} aria-label="Convert to lowercase">
+                <Icon icon="mdi:format-lowercase" className="me-1 file-icon" aria-hidden="true" /> Lower Case
+              </button>
+              <button className="btn btn-primary" onClick={sentenceCase} aria-label="Apply sentence case">
+                <Icon icon="mdi:format-letter-case" className="me-1 file-icon" aria-hidden="true" /> Sentence Case
+              </button>
+            </div>
+            
+            {/* Utility Actions buttons - Desktop only */}
+            <div className="btn-group format-btn-group flex-wrap d-none d-lg-flex">
+              <button disabled={text.length === 0} className="btn btn-success" onClick={copyText} aria-label="Copy text">
+                <Icon icon="solar:copy-linear" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> Copy
+              </button>
+              <button disabled={text.length === 0} className="btn btn-danger" onClick={clearText} aria-label="Clear text">
+                <Icon icon="ri:delete-bin-6-line" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> Clear
+              </button>
+              <button disabled={text.length === 0} className="btn btn-secondary" onClick={undo} aria-label="Undo last action">
+                <Icon icon="ic:round-undo" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> Undo
+              </button>
+            </div>
           </div>
         </div>
         
@@ -244,10 +263,10 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
           </div>
         </div>
         
-        {/* Group 3: Utility Actions */}
-        <div className="mb-3">
+        {/* Group 3: Utility Actions - Mobile only (after Text Manipulation) */}
+        <div className="mb-3 d-lg-none">
           <h6 className={`mb-2 ${mode === 'dark' ? 'text-light' : 'text-muted'} heading-animated`}>Utility Actions</h6>
-          <div className="btn-group format-btn-group">
+          <div className="btn-group format-btn-group flex-wrap">
             <button disabled={text.length === 0} className="btn btn-success" onClick={copyText} aria-label="Copy text">
               <Icon icon="solar:copy-linear" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> Copy
             </button>

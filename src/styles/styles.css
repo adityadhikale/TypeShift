@@ -367,12 +367,16 @@ footer {
     transition: transform 0.2s ease, box-shadow 0.2s ease, background-color var(--theme-transition-duration) var(--theme-transition-timing);
     display: flex;
     align-items: center;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.875rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border: none;
     position: relative;
     z-index: 1;
+    gap: 0.25rem;
+    white-space: nowrap;
+    min-width: fit-content;
 }
 
 .file-btn:hover {
@@ -407,6 +411,25 @@ footer {
     overflow: hidden;
 }
 
+/* Inline layout for Case Transformation and Utility Actions */
+.format-btn-group.flex-wrap {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+/* Responsive adjustments for inline utility actions */
+@media (min-width: 992px) {
+    /* Desktop: Keep utility actions on the right */
+    .d-flex.flex-lg-row.justify-content-between {
+        align-items: flex-start;
+    }
+    
+    .format-btn-group.flex-wrap {
+        flex: 0 1 auto;
+        max-width: 48%;
+    }
+}
+
 /* Mobile touch feedback */
 @media (max-width: 768px) {
     .file-btn, .format-btn-group .btn, .theme-toggle-btn, .navbar-brand {
@@ -436,6 +459,32 @@ footer {
     
     .dark-mode .file-btn:active, .dark-mode .format-btn-group .btn:active, .dark-mode .theme-toggle-btn:active {
         background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Mobile utility actions - stack vertically */
+    .utility-actions-sidebar {
+        position: static;
+        top: auto;
+        margin-top: 2rem;
+        padding: 0;
+    }
+    
+    .utility-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        min-height: 42px;
+    }
+}
+
+/* Tablet adjustments */
+@media (min-width: 768px) and (max-width: 991px) {
+    .utility-actions-sidebar {
+        margin-top: 1.5rem;
+    }
+    
+    .utility-btn {
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
     }
 }
 
