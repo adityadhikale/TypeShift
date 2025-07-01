@@ -1,9 +1,9 @@
-# WildText 📝
+# TypeShift 📝
 
-Welcome to WildText, your comprehensive text manipulation and utility tool! 🎉
+Welcome to TypeShift, your comprehensive text manipulation and utility tool! 🎉
 
 ## About
-WildText is a modern, responsive web application built with React and TypeScript, designed to provide powerful text manipulation capabilities with an intuitive user interface. Whether you're a writer, developer, content creator, or anyone working with text, WildText offers a complete suite of tools to transform and analyze your text efficiently! 💪
+TypeShift is a modern, responsive web application built with React and TypeScript, designed to provide powerful text manipulation capabilities with an intuitive user interface. Whether you're a writer, developer, content creator, or anyone working with text, TypeShift offers a complete suite of tools to transform and analyze your text efficiently! 💪
 
 ## ✨ Key Features
 
@@ -68,7 +68,7 @@ WildText is a modern, responsive web application built with React and TypeScript
 ## 📈 Text Analytics Features
 
 ### **Intelligent Text Analysis**
-WildText provides comprehensive text analysis with professional-grade metrics:
+TypeShift provides comprehensive text analysis with professional-grade metrics:
 
 #### **Basic Metrics (Row 1)**
 - **Words**: Enhanced word counting algorithm
@@ -117,16 +117,16 @@ WildText provides comprehensive text analysis with professional-grade metrics:
 
 ## 🌐 Get Started
 
-Visit [WildText](https://wildtext.netlify.app/) now and experience the most comprehensive text manipulation tool available!
+Visit [TypeShift](https://typeshift.netlify.app/) now and experience the most comprehensive text manipulation tool available!
 
 ### Local Development
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/WildText.git
+git clone https://github.com/yourusername/TypeShift.git
 
 # Navigate to project directory
-cd WildText
+cd TypeShift
 
 # Install dependencies
 npm install
@@ -142,6 +142,6 @@ npm run build
 
 ## 💬 Feedback & Support
 
-We're constantly improving WildText! If you have suggestions, feature requests, or encounter any issues, please don't hesitate to reach out. Your feedback helps make WildText better for everyone! 🌟
+We're constantly improving TypeShift! If you have suggestions, feature requests, or encounter any issues, please don't hesitate to reach out. Your feedback helps make TypeShift better for everyone! 🌟
 
 **Happy text manipulating!** ✨

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon } from "@iconify/react";
-import logo from '../images/logo.png';
+import logo from '../images/typeshift-logo.svg';
 
 // Define types for the props
 interface NavbarProps {
@@ -13,8 +13,8 @@ const Navbar: React.FC<NavbarProps> = ({ title, mode, toggleMode }) => {
   return (
     <nav className={`navbar navbar-${mode} bg-${mode}`} id="main-navbar">
       <div className="container-fluid" style={{ width: '86%' }}>
-        <a className="navbar-brand logo-hover" href="/" aria-label="WildText Home">
-          <img src={logo} alt="WildText logo" className='logo' />
+        <a className="navbar-brand logo-hover" href="/" aria-label="TypeShift Home">
+          <img src={logo} alt="TypeShift logo" className='logo' />
           <span className="brand-text">{title}</span>
         </a>
         <div className="d-flex align-items-center">
