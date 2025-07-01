@@ -134,6 +134,93 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
     toast.success('List Created');
   };
 
+  // Simple function to count syllables in a word
+  const countSyllables = (word: string): number => {
+    word = word.toLowerCase();
+    if(word.length <= 3) return 1; // A short word can't have multiple syllables
+    word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
+    word = word.replace(/^y/, '');
+    const matches = word.match(/[aeiouy]{1,2}/g);
+    return matches ? matches.length : 0;
+  };
+
+  // Function to count total syllables in text
+  const getTotalSyllables = (): number => {
+    if (!text.trim()) return 0;
+    
+    const words = text.split(/\s+/).filter(word => word.length > 0);
+    return words.reduce((total, word) => total + countSyllables(word), 0);
+  };
+
+  // Function to count complex words (3+ syllables)
+  const getComplexWords = (): number => {
+    if (!text.trim()) return 0;
+    
+    const words = text.split(/\s+/).filter(word => word.length > 0);
+    return words.filter(word => countSyllables(word) >= 3).length;
+  };
+
+  // Reliable word counting function
+  const getWordCount = (): number => {
+    if (!text.trim()) return 0;
+    return text.split(/\s+/).filter((element) => element.length !== 0).length;
+  };
+
+  // Reliable sentence counting function
+  const getSentenceCount = (): number => {
+    if (!text.trim()) return 0;
+    return text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+  };
+
+
+  // Average word length calculation
+  const getAverageWordLength = (): string => {
+    if (!text.trim()) return "0";
+    
+    const words = text.split(/\s+/).filter(Boolean);
+    if (words.length === 0) return "0";
+    
+    const totalLength = words.reduce((sum, word) => {
+      return sum + word.replace(/[^a-zA-Z]/g, '').length;
+    }, 0);
+    
+    return (totalLength / words.length).toFixed(2);
+  };
+
+  // Average sentence length calculation
+  const getAverageSentenceLength = (): string => {
+    if (!text.trim()) return "0 words";
+    
+    const sentences = getSentenceCount();
+    const words = getWordCount();
+    
+    if (sentences === 0) return "0 words";
+    
+    const avgLength = words / sentences;
+    return `${avgLength.toFixed(2)} words`;
+  };
+
+  // Gunning Fog Index calculation using custom implementation
+  const getGunningFogIndex = (): string => {
+    if (!text.trim()) return "0.0";
+    
+    const sentences = getSentenceCount();
+    const words = getWordCount();
+    
+    if (sentences === 0 || words === 0) {
+      return "0.0";
+    }
+    
+    const avgWordsPerSentence = words / sentences;
+    const complexWords = getComplexWords();
+    const percentComplexWords = (complexWords / words) * 100;
+    
+    // Gunning Fog Index formula: 0.4 * (avgWordsPerSentence + percentComplexWords)
+    const fogIndex = 0.4 * (avgWordsPerSentence + percentComplexWords);
+    
+    return fogIndex.toFixed(1);
+  };
+
   return (
     <>
       {/* Container for Import/Export buttons */}
@@ -285,12 +372,13 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
         <hr />
         <h4 className="my-3 heading-animated">Your Text Summary</h4>
         
-        {/* Grid layout for summary statistics */}
-        <div className={`row row-cols-2 row-cols-md-3 g-2 ${mode === 'dark' ? 'dark-mode' : ''}`}>
+        {/* Grid layout for summary statistics - Organized logically */}
+        <div className={`row row-cols-2 row-cols-md-4 g-2 ${mode === 'dark' ? 'dark-mode' : ''}`}>
+          {/* Basic Counts - First Row */}
           <div className="col">
             <SummaryCard 
               title="Words" 
-              value={text.split(/\s+/).filter((element) => element.length !== 0).length} 
+              value={getWordCount()} 
             />
           </div>
           <div className="col">
@@ -302,7 +390,7 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
           <div className="col">
             <SummaryCard 
               title="Sentences" 
-              value={text.split(/[.!?]/).filter(Boolean).length} 
+              value={getSentenceCount()} 
             />
           </div>
           <div className="col">
@@ -311,20 +399,30 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
               value={text.split('\n').filter(line => line.trim() !== '').length} 
             />
           </div>
+          
+          {/* Advanced Metrics - Second Row */}
+          <div className="col">
+            <SummaryCard 
+              title="Syllables" 
+              value={getTotalSyllables()} 
+            />
+          </div>
           <div className="col">
             <SummaryCard 
               title="Avg Word Length" 
-              value={text.split(/\s+/).filter(Boolean).length ? 
-                (text.replace(/\s+/g, '').length / text.split(/\s+/).filter(Boolean).length).toFixed(2) : 
-                "0"} 
+              value={getAverageWordLength()} 
             />
           </div>
           <div className="col">
             <SummaryCard 
               title="Avg Sentence Length" 
-              value={text.split(/[.!?]/).filter(Boolean).length ? 
-                (text.split(/[.!?]/).filter(Boolean).reduce((acc, sentence) => acc + sentence.split(/\s+/).filter(Boolean).length, 0) / text.split(/[.!?]/).filter(Boolean).length).toFixed(2) + " words" : 
-                "0 words"} 
+              value={getAverageSentenceLength()} 
+            />
+          </div>
+          <div className="col">
+            <SummaryCard 
+              title="Gunning Fog Index" 
+              value={getGunningFogIndex()} 
             />
           </div>
         </div>

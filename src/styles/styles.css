@@ -140,16 +140,17 @@ footer {
 .summary-card {
     border: 1px solid rgba(0, 0, 0, 0.125);
     border-radius: 0.5rem;
-    padding: 0.5rem; /* Reduced padding */
+    padding: 0.75rem; /* Slightly increased for better readability */
     text-align: center;
-    margin-bottom: 0.5rem; /* Reduced margin */
+    margin-bottom: 0.5rem;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-height: 80px; /* Limit height */
+    min-height: 85px; /* Consistent height for all cards */
+    max-height: 120px; /* Allow for longer text like "Gunning Fog Index" */
 }
 
 .summary-card:hover {

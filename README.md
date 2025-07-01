@@ -30,13 +30,15 @@ WildText is a modern, responsive web application built with React and TypeScript
 - **Undo**: Revert to previous text state
 - **Smart Positioning**: Always accessible without scrolling
 
-### 📊 **Text Analytics**
-- **Word Count**: Total number of words
-- **Character Count**: Total characters including spaces
-- **Sentence Count**: Number of sentences detected
-- **Line Count**: Number of non-empty lines
-- **Average Word Length**: Statistical analysis
-- **Average Sentence Length**: Words per sentence
+### 📊 **Advanced Text Analytics**
+- **Word Count**: Accurate word counting using enhanced algorithms
+- **Character Count**: Total characters including spaces and punctuation
+- **Sentence Count**: Intelligent sentence detection using punctuation analysis
+- **Line Count**: Non-empty line counting
+- **Syllable Count**: Professional syllable counting for linguistic analysis
+- **Average Word Length**: Vocabulary complexity measurement
+- **Average Sentence Length**: Writing style and structure analysis
+- **Gunning Fog Index**: Professional readability score (0-20 scale indicating education level required)
 
 ### 🎨 **User Experience**
 - **Responsive Design**: Optimized for desktop, tablet, and mobile
@@ -63,6 +65,30 @@ WildText is a modern, responsive web application built with React and TypeScript
 - **Logical Flow**: Case Transformation → Text Manipulation → Utility Actions
 - **Responsive Navigation**: Adaptive layout for all screen sizes
 
+## 📈 Text Analytics Features
+
+### **Intelligent Text Analysis**
+WildText provides comprehensive text analysis with professional-grade metrics:
+
+#### **Basic Metrics (Row 1)**
+- **Words**: Enhanced word counting algorithm
+- **Characters**: Complete character analysis including spaces and punctuation
+- **Sentences**: Intelligent sentence detection using advanced punctuation analysis
+- **Lines**: Smart non-empty line counting
+
+#### **Advanced Metrics (Row 2)**
+- **Syllables**: Professional syllable counting for linguistic complexity analysis
+- **Average Word Length**: Vocabulary sophistication measurement
+- **Average Sentence Length**: Writing style and structure complexity analysis
+- **Gunning Fog Index**: Industry-standard readability score
+
+#### **Gunning Fog Index Scale**
+- **0-6**: Elementary school level (Very Easy)
+- **7-9**: Middle school level (Easy)
+- **10-13**: High school level (Moderate)
+- **14-18**: College level (Difficult)
+- **19+**: Graduate level (Very Difficult)
+
 ## 🛠️ Technology Stack
 
 - **Frontend**: React 18 with TypeScript
@@ -70,6 +96,7 @@ WildText is a modern, responsive web application built with React and TypeScript
 - **Styling**: Bootstrap 5 with custom CSS
 - **Icons**: Iconify React for consistent iconography
 - **Notifications**: React Hot Toast for user feedback
+- **Text Analysis**: Custom algorithms for accurate linguistic analysis
 - **Deployment**: Optimized for modern web standards
 
 ## 🎯 Development Features
