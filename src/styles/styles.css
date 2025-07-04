@@ -121,12 +121,12 @@ footer {
     padding: 1rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
-    overflow-y: auto;
-    max-height: 40vh; /* Makes long content scrollable */
+    /* Removed overflow-y and max-height to show all content at once */
     transition: background-color 0.2s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     white-space: pre-wrap; /* Preserves whitespace and line breaks */
     word-wrap: break-word; /* Ensures long words don't overflow */
+    min-height: 3rem; /* Minimum height for empty state */
 }
 
 /* Dark mode adjustments for preview container */
