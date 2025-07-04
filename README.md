@@ -123,7 +123,7 @@ Visit [TypeShift](https://typeshift.netlify.app/) now and experience the most co
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/TypeShift.git
+git clone https://github.com/adityadhikale/TypeShift.git
 
 # Navigate to project directory
 cd TypeShift

@@ -44,7 +44,7 @@
 .logo{
     width: 45px;
     height: 40px;
-    margin: 0 13px;
+    margin: 0;
 }
 
 .text-white::placeholder{
@@ -304,6 +304,7 @@ footer {
 .brand-text {
     position: relative;
     padding: 2px 0;
+    margin-bottom: 5px;
 }
 .theme-toggle-btn {
     transition: transform 0.2s ease, background-color var(--theme-transition-duration) var(--theme-transition-timing);
