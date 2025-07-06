@@ -302,13 +302,13 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
           <div className="d-flex flex-column flex-lg-row justify-content-between gap-3">
             {/* Case Transformation buttons */}
             <div className="btn-group format-btn-group flex-wrap">
-              <button className="btn btn-primary" onClick={upperCase} aria-label="Convert to uppercase">
+              <button disabled={text.length === 0} className="btn btn-primary" onClick={upperCase} aria-label="Convert to uppercase">
                 <Icon icon="mdi:format-uppercase" className="me-1 file-icon" aria-hidden="true" /> Upper Case
               </button>
-              <button className="btn btn-primary" onClick={lowerCase} aria-label="Convert to lowercase">
+              <button disabled={text.length === 0} className="btn btn-primary" onClick={lowerCase} aria-label="Convert to lowercase">
                 <Icon icon="mdi:format-lowercase" className="me-1 file-icon" aria-hidden="true" /> Lower Case
               </button>
-              <button className="btn btn-primary" onClick={sentenceCase} aria-label="Apply sentence case">
+              <button disabled={text.length === 0} className="btn btn-primary" onClick={sentenceCase} aria-label="Apply sentence case">
                 <Icon icon="mdi:format-letter-case" className="me-1 file-icon" aria-hidden="true" /> Sentence Case
               </button>
             </div>
@@ -332,19 +332,19 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
         <div className="mb-3">
           <h6 className={`mb-2 ${mode === 'dark' ? 'text-light' : 'text-muted'} heading-animated`}>Text Manipulation</h6>
           <div className="btn-group format-btn-group">
-            <button className="btn btn-primary" onClick={removeExtraSpaces} aria-label="Remove extra spaces">
+            <button disabled={text.length === 0} className="btn btn-primary" onClick={removeExtraSpaces} aria-label="Remove extra spaces">
               <Icon icon="mdi:format-horizontal-align-center" className="me-1 file-icon" aria-hidden="true" /> Remove Spaces
             </button>
-            <button className="btn btn-primary" onClick={removePara} aria-label="Make one paragraph">
+            <button disabled={text.length === 0} className="btn btn-primary" onClick={removePara} aria-label="Make one paragraph">
               <Icon icon="mdi:format-align-justify" className="me-1 file-icon" aria-hidden="true" /> One Paragraph
             </button>
           </div>
           
           <div className="btn-group format-btn-group">
-            <button className="btn btn-primary" onClick={sortTextLines} aria-label="Sort lines alphabetically">
+            <button disabled={text.length === 0} className="btn btn-primary" onClick={sortTextLines} aria-label="Sort lines alphabetically">
               <Icon icon="mdi:sort-alphabetical-ascending" className="me-1 file-icon" aria-hidden="true" /> Sort Lines
             </button>
-            <button className="btn btn-primary" onClick={makeList} aria-label="Create numbered list">
+            <button disabled={text.length === 0} className="btn btn-primary" onClick={makeList} aria-label="Create numbered list">
               <Icon icon="mdi:format-list-numbered" className="me-1 file-icon" aria-hidden="true" /> Make List
             </button>
           </div>
