@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Icon } from "@iconify/react";
 import '../styles/styles.css';
+import { handleFileImport, getFileTypeDescription } from '../utils/fileHandlers';
+import { exportAsDocx } from '../utils/docxExporter';
 
 // Summary Card Component
 interface SummaryCardProps {
@@ -28,23 +30,39 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
   const [text, setText] = useState<string>('');
   const [textHistory, setTextHistory] = useState<string[]>([]);
 
-  // Function to handle file import
-  const importFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Enhanced function to handle multi-format file import
+  const importFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const fileContent = reader.result as string;
-        setText(fileContent);
-        toast.success('File Imported Successfully');
-      };
-      reader.readAsText(file);
-    } else {
+    if (!file) {
       toast.error('No file selected');
+      return;
+    }
+
+    // Save current text to history before importing
+    if (text.trim()) {
+      setTextHistory([...textHistory, text]);
+    }
+
+    const fileType = getFileTypeDescription(file.name);
+    const toastId = toast.loading(`Processing ${fileType}...`);
+
+    try {
+      const extractedText = await handleFileImport(file);
+      setText(extractedText);
+      toast.success(`${fileType} imported successfully!`, { id: toastId });
+    } catch (error) {
+      console.error('File import error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      toast.error(`Failed to import ${fileType}: ${errorMessage}`, { id: toastId });
+    } finally {
+      // Clear the input so the same file can be selected again
+      if (event.target) {
+        event.target.value = '';
+      }
     }
   };
 
-  // Export function (as before)
+  // Export function for text files
   const exportAsFile = (fileType: 'txt' | 'md') => {
     const blob = new Blob([text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -59,6 +77,19 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
 
     link.click();
     URL.revokeObjectURL(url); // Clean up the object URL after download
+  };
+
+  // Export function for DOCX
+  const exportAsDocxFile = async () => {
+    try {
+      toast.loading('Creating Word document...', { id: 'docx-export' });
+      await exportAsDocx(text, 'document.docx');
+      toast.success('Word document exported successfully!', { id: 'docx-export' });
+    } catch (error) {
+      console.error('DOCX export error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      toast.error(`Failed to export Word document: ${errorMessage}`, { id: 'docx-export' });
+    }
   };
 
   // Undo function
@@ -234,7 +265,11 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
             <h6 className={`mb-2 ${mode === 'dark' ? 'text-light' : 'text-muted'} heading-animated`}>File Operations</h6>
             <div className="file-operations-group">
               {/* Import Button */}
-              <button className="btn btn-primary file-btn" aria-label="Import text file">
+              <button 
+                className="btn btn-primary file-btn" 
+                aria-label="Import text from TXT, MD, or Word documents"
+                title="Supports: TXT, MD, DOCX files"
+              >
                 <label htmlFor="file-input" style={{ cursor: 'pointer', margin: 0, display: 'flex', alignItems: 'center' }}>
                   <Icon icon="mdi:file-import" className="me-1 file-icon" aria-hidden="true" /> 
                   <span>Import</span>
@@ -242,7 +277,7 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
                 <input
                   type="file"
                   id="file-input"
-                  accept=".txt,.md"
+                  accept=".txt,.md,.docx,.doc"
                   style={{ display: 'none' }}
                   onChange={importFile}
                 />
@@ -271,6 +306,12 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
                   <li>
                     <button className="dropdown-item" onClick={() => exportAsFile('md')} disabled={text.length === 0} aria-label="Export as markdown file">
                       <Icon icon="mdi:language-markdown" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> As .md
+                    </button>
+                  </li>
+                  <li><hr className="dropdown-divider"/></li>
+                  <li>
+                    <button className="dropdown-item" onClick={exportAsDocxFile} disabled={text.length === 0} aria-label="Export as Word document">
+                      <Icon icon="mdi:file-word-box" className="me-1 file-icon" width="20" height="20" aria-hidden="true" /> As .docx
                     </button>
                   </li>
                 </ul>
