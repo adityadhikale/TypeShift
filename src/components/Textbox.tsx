@@ -165,6 +165,13 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
     toast.success('List Created');
   };
 
+  const removeExtraVerticalSpaces = () => {
+    // Replace multiple consecutive line breaks with a single line break
+    const newText = text.replace(/\n{3,}/g, '\n\n').trim();
+    setText(newText);
+    toast.success('Extra Vertical Spaces Removed');
+  };
+
   // Simple function to count syllables in a word
   const countSyllables = (word: string): number => {
     word = word.toLowerCase();
@@ -373,8 +380,11 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
         <div className="mb-3">
           <h6 className={`mb-2 ${mode === 'dark' ? 'text-light' : 'text-muted'} heading-animated`}>Text Manipulation</h6>
           <div className="btn-group format-btn-group">
-            <button disabled={text.length === 0} className="btn btn-primary" onClick={removeExtraSpaces} aria-label="Remove extra spaces">
+            <button disabled={text.length === 0} className="btn btn-primary" onClick={removeExtraSpaces} aria-label="Remove extra horizontal spaces">
               <Icon icon="mdi:format-horizontal-align-center" className="me-1 file-icon" aria-hidden="true" /> Remove Spaces
+            </button>
+            <button disabled={text.length === 0} className="btn btn-primary" onClick={removeExtraVerticalSpaces} aria-label="Remove extra vertical spaces">
+              <Icon icon="mdi:format-line-spacing" className="me-1 file-icon" aria-hidden="true" /> Remove Vertical Spaces
             </button>
             <button disabled={text.length === 0} className="btn btn-primary" onClick={removePara} aria-label="Make one paragraph">
               <Icon icon="mdi:format-align-justify" className="me-1 file-icon" aria-hidden="true" /> One Paragraph

@@ -8,8 +8,9 @@ TypeShift is a modern, responsive web application built with React and TypeScrip
 ## ✨ Key Features
 
 ### 📁 **File Operations**
-- **Import**: Load text files (.txt, .md) directly into the editor
-- **Export**: Save your manipulated text as .txt or .md files
+- **Import**: Load multiple file formats (.txt, .md, .docx) directly into the editor
+- **Export**: Save your manipulated text as .txt, .md, or .docx files
+- **DOCX Support**: Import from and export to Microsoft Word documents
 - **Seamless Integration**: Drag, drop, and download functionality
 
 ### 🔤 **Case Transformation**
@@ -19,7 +20,8 @@ TypeShift is a modern, responsive web application built with React and TypeScrip
 - **Smart Detection**: Handles various punctuation marks correctly
 
 ### 🛠️ **Text Manipulation**
-- **Remove Extra Spaces**: Clean up multiple consecutive spaces
+- **Remove Extra Spaces**: Clean up multiple consecutive horizontal spaces
+- **Remove Vertical Spaces**: Clean up excessive line breaks and vertical spacing
 - **One Paragraph**: Merge all text into a single paragraph
 - **Sort Lines**: Alphabetically sort text lines
 - **Make List**: Convert text lines into numbered lists
@@ -51,9 +53,9 @@ TypeShift is a modern, responsive web application built with React and TypeScrip
 
 ### Getting Started
 1. **Input Text**: Type directly or paste text into the main textarea
-2. **Import Files**: Use the Import button to load text files from your device
+2. **Import Files**: Use the Import button to load text files (.txt, .md, .docx) from your device
 3. **Choose Actions**: Select from formatting options or utility actions
-4. **Export Results**: Save your processed text using the Export dropdown
+4. **Export Results**: Save your processed text using the Export dropdown (.txt, .md, .docx)
 
 ### Desktop Experience
 - **Efficient Layout**: Utility Actions positioned inline with Case Transformation
