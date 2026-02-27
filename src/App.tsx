@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 
 import Navbar from './components/Navbar';
 import Textbox from './components/Textbox';
-import TosterProvider from "./providers/TosterProvider";
+import ToasterProvider from "./providers/ToasterProvider";
 import Footer from "./components/Footer";
 
 // Define types for the mode
@@ -42,10 +42,7 @@ const App: React.FC = () => {
     };
 
     mediaQuery.addEventListener('change', handleChange);
-    
-    // Set initial body style
-    updateBodyStyle(mode);
-    
+
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
@@ -72,7 +69,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      <TosterProvider mode={mode} />
+      <ToasterProvider mode={mode} />
       <Navbar title="TypeShift" mode={mode} toggleMode={toggleMode} />
       <Textbox heading="Enter text below" mode={mode} />
       <Footer mode={mode} />

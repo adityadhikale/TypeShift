@@ -1,15 +1,38 @@
 import mammoth from 'mammoth';
 
 /**
- * Handles text file import (.txt, .md)
+ * Detects text encoding from a file's byte content by checking BOM signatures.
+ * Falls back to UTF-8 if no BOM is found.
  */
-export const handleTextFile = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(new Error('Failed to read text file'));
-    reader.readAsText(file);
-  });
+const detectEncoding = (buffer: ArrayBuffer): string => {
+  const bytes = new Uint8Array(buffer);
+
+  // UTF-8 BOM: EF BB BF
+  if (bytes.length >= 3 && bytes[0] === 0xEF && bytes[1] === 0xBB && bytes[2] === 0xBF) {
+    return 'utf-8';
+  }
+
+  // UTF-16 LE BOM: FF FE
+  if (bytes.length >= 2 && bytes[0] === 0xFF && bytes[1] === 0xFE) {
+    return 'utf-16le';
+  }
+
+  // UTF-16 BE BOM: FE FF
+  if (bytes.length >= 2 && bytes[0] === 0xFE && bytes[1] === 0xFF) {
+    return 'utf-16be';
+  }
+
+  return 'utf-8';
+};
+
+/**
+ * Handles text file import (.txt, .md) with encoding detection
+ */
+export const handleTextFile = async (file: File): Promise<string> => {
+  const buffer = await file.arrayBuffer();
+  const encoding = detectEncoding(buffer);
+  const decoder = new TextDecoder(encoding);
+  return decoder.decode(buffer);
 };
 
 

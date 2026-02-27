@@ -1,11 +1,11 @@
 import React from 'react'
 import { Toaster } from 'react-hot-toast'
 
-interface TosterProviderProps {
+interface ToasterProviderProps {
     mode: 'light' | 'dark';
 }
 
-const TosterProvider: React.FC<TosterProviderProps> = ({ mode }) => {
+const ToasterProvider: React.FC<ToasterProviderProps> = ({ mode }) => {
     return (
         <Toaster
             position="top-right"
@@ -51,4 +51,4 @@ const TosterProvider: React.FC<TosterProviderProps> = ({ mode }) => {
     )
 }
 
-export default TosterProvider
+export default ToasterProvider
