@@ -234,6 +234,23 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
     toast.success('Extra Spaces Removed');
   };
 
+  const addSingleSpaces = () => {
+    const newText = text.split('\n')
+      .map(line => line.trim().split(/\s+/).filter(Boolean).join(' '))
+      .join('\n');
+    applyTransform(newText);
+    toast.success('One Space Added Between Words');
+  };
+
+  const fixPunctuationSpacing = () => {
+    const newText = text
+      .replace(/[ \t]+([,.;:!?])/g, '$1')
+      .replace(/([,;:!?])(?=\S)/g, '$1 ')
+      .replace(/([.!?])(?=[A-Za-z])/g, '$1 ');
+    applyTransform(newText);
+    toast.success('Punctuation Spacing Fixed');
+  };
+
   const removePara = () => {
     const newText = text.replace(/\s+/g, ' ').trim();
     applyTransform(newText.trim());
@@ -610,6 +627,12 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
           <div className="btn-group format-btn-group">
             <button disabled={text.length === 0} className="btn btn-primary" onClick={removeExtraSpaces} aria-label="Remove extra horizontal spaces">
               <Icon icon="mdi:format-horizontal-align-center" className="me-1 file-icon" aria-hidden="true" /> Remove Spaces
+            </button>
+            <button disabled={text.length === 0} className="btn btn-primary" onClick={addSingleSpaces} aria-label="Add one space between words">
+              <Icon icon="mdi:format-letter-spacing" className="me-1 file-icon" aria-hidden="true" /> One Space
+            </button>
+            <button disabled={text.length === 0} className="btn btn-primary" onClick={fixPunctuationSpacing} aria-label="Fix punctuation spacing">
+              <Icon icon="mdi:format-text-wrapping-wrap" className="me-1 file-icon" aria-hidden="true" /> Fix Punctuation
             </button>
             <button disabled={text.length === 0} className="btn btn-primary" onClick={removeExtraVerticalSpaces} aria-label="Remove extra vertical spaces">
               <Icon icon="mdi:format-line-spacing" className="me-1 file-icon" aria-hidden="true" /> Remove Vertical Spaces
