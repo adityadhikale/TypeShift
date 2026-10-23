@@ -2,7 +2,11 @@
  * Exports text as a PDF by opening a print-friendly window.
  * Uses the browser's native print dialog, which supports "Save as PDF".
  */
-export const exportAsPdf = (text: string, title: string = 'TypeShift Document'): void => {
+export const exportAsPdf = (
+  text: string,
+  title: string = 'TypeShift Document',
+  format?: { bold: boolean; italic: boolean; fontSize: number }
+): void => {
   const printWindow = window.open('', '_blank');
   if (!printWindow) {
     throw new Error('Pop-up blocked. Please allow pop-ups for this site to export as PDF.');
@@ -27,7 +31,10 @@ export const exportAsPdf = (text: string, title: string = 'TypeShift Document'):
           padding: 2rem;
           max-width: 800px;
           margin: 0 auto;
-          color: #333;
+          color: #333;${format ? `
+          font-size: ${format.fontSize}px;
+          font-weight: ${format.bold ? 700 : 400};
+          font-style: ${format.italic ? 'italic' : 'normal'};` : ''}
         }
         @media print {
           body { padding: 0; }

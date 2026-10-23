@@ -6,6 +6,25 @@ import { handleFileImport, getFileTypeDescription } from '../utils/fileHandlers'
 import { exportAsDocx } from '../utils/docxExporter';
 import { exportAsPdf } from '../utils/pdfExporter';
 
+const MIN_FONT_SIZE = 8;
+const MAX_FONT_SIZE = 200;
+const DEFAULT_FONT_SIZE = 16;
+const FONT_SIZE_PRESETS = [12, 14, 16, 18, 20, 24, 28, 32, 48, 64, 72];
+const clampFontSize = (n: number) => Math.min(MAX_FONT_SIZE, Math.max(MIN_FONT_SIZE, Math.round(n)));
+
+const loadStyle = () => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('typeshift-text-style') || '{}');
+    return {
+      bold: saved.bold === true,
+      italic: saved.italic === true,
+      fontSize: typeof saved.fontSize === 'number' ? clampFontSize(saved.fontSize) : DEFAULT_FONT_SIZE,
+    };
+  } catch {
+    return { bold: false, italic: false, fontSize: DEFAULT_FONT_SIZE };
+  }
+};
+
 // Summary Card Component
 interface SummaryCardProps {
   title: string;
@@ -39,6 +58,7 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
   const [replaceText, setReplaceText] = useState('');
   const [caseSensitive, setCaseSensitive] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [textStyle, setTextStyle] = useState(loadStyle);
   const [textAnalytics, setTextAnalytics] = useState({
     wordCount: 0,
     sentenceCount: 0,
@@ -84,6 +104,32 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
   useEffect(() => {
     localStorage.setItem('typeshift-autosave', text);
   }, [text]);
+
+  // Persist text style (bold / italic / font size)
+  useEffect(() => {
+    localStorage.setItem('typeshift-text-style', JSON.stringify(textStyle));
+  }, [textStyle]);
+
+  const toggleBold = useCallback(() => setTextStyle(prev => ({ ...prev, bold: !prev.bold })), []);
+  const toggleItalic = useCallback(() => setTextStyle(prev => ({ ...prev, italic: !prev.italic })), []);
+  const changeFontSize = (fontSize: number) => setTextStyle(prev => ({ ...prev, fontSize: clampFontSize(fontSize) }));
+  const resetStyle = () => setTextStyle({ bold: false, italic: false, fontSize: DEFAULT_FONT_SIZE });
+
+  // Draft lets the user clear/retype the size field; it is clamped and committed on blur
+  const [sizeDraft, setSizeDraft] = useState<string | null>(null);
+  const commitSizeDraft = () => {
+    if (sizeDraft !== null) {
+      const n = parseInt(sizeDraft, 10);
+      if (!Number.isNaN(n)) changeFontSize(n);
+      setSizeDraft(null);
+    }
+  };
+
+  const textStyleCss: React.CSSProperties = {
+    fontWeight: textStyle.bold ? 700 : 400,
+    fontStyle: textStyle.italic ? 'italic' : 'normal',
+    fontSize: `${textStyle.fontSize}px`,
+  };
 
   // Helper to apply text transformations with undo support
   const applyTransform = (newText: string) => {
@@ -146,7 +192,7 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
   const exportAsDocxFile = async () => {
     try {
       toast.loading('Creating Word document...', { id: 'docx-export' });
-      await exportAsDocx(text, 'document.docx');
+      await exportAsDocx(text, 'document.docx', textStyle);
       toast.success('Word document exported successfully!', { id: 'docx-export' });
     } catch (error) {
       console.error('DOCX export error:', error);
@@ -158,7 +204,7 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
   // Export function for PDF
   const exportAsPdfFile = () => {
     try {
-      exportAsPdf(text);
+      exportAsPdf(text, 'TypeShift Document', textStyle);
       toast.success('PDF print dialog opened');
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
@@ -455,6 +501,18 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
         }
       }
 
+      // Ctrl+B / Ctrl+I: Bold / Italic
+      if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && (e.key === 'b' || e.key === 'B')) {
+        e.preventDefault();
+        toggleBold();
+        return;
+      }
+      if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && (e.key === 'i' || e.key === 'I')) {
+        e.preventDefault();
+        toggleItalic();
+        return;
+      }
+
       // Ctrl+Shift+K: Toggle shortcuts help
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'k' || e.key === 'K')) {
         e.preventDefault();
@@ -472,20 +530,20 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [toggleBold, toggleItalic]);
 
   return (
     <>
       {/* Container for Import/Export buttons */}
       <div className="container my-1" style={{ color: mode === 'dark' ? 'white' : 'black' }}>
         {/* Import and Export Buttons */}
-        <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-          <label className="form-label my-3 heading-animated">{heading}</label>
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-end mb-3">
+          <h6 className={`mb-2 mb-md-0 d-flex align-items-center ${mode === 'dark' ? 'text-light' : 'text-muted'} heading-animated`} style={{ minHeight: '32px' }}>{heading}</h6>
 
           {/* File Operations Group */}
-          <div className="mb-3">
+          <div>
             <h6 className={`mb-2 ${mode === 'dark' ? 'text-light' : 'text-muted'} heading-animated`}>File Operations</h6>
-            <div className="file-operations-group">
+            <div className="file-operations-group mb-0">
               {/* Import Button */}
               <button
                 className="btn btn-primary file-btn"
@@ -547,6 +605,94 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
           </div>
         </div>
         <div className="mb-3">
+          {/* Compact text style toolbar attached to the text area */}
+          <div className={`text-style-toolbar ${mode === 'dark' ? 'dark-mode' : ''}`} role="toolbar" aria-label="Text style">
+            <button
+              type="button"
+              className={`btn btn-sm ${textStyle.bold ? 'btn-primary' : 'btn-outline-secondary'}`}
+              onClick={toggleBold}
+              aria-pressed={textStyle.bold}
+              aria-label="Toggle bold"
+              title="Bold (Ctrl+B)"
+            >
+              <Icon icon="mdi:format-bold" width="18" height="18" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className={`btn btn-sm ${textStyle.italic ? 'btn-primary' : 'btn-outline-secondary'}`}
+              onClick={toggleItalic}
+              aria-pressed={textStyle.italic}
+              aria-label="Toggle italic"
+              title="Italic (Ctrl+I)"
+            >
+              <Icon icon="mdi:format-italic" width="18" height="18" aria-hidden="true" />
+            </button>
+            <div className="btn-group font-size-group" role="group" aria-label="Font size">
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-secondary"
+                onClick={() => changeFontSize(textStyle.fontSize - 1)}
+                disabled={textStyle.fontSize <= MIN_FONT_SIZE}
+                aria-label="Decrease font size"
+                title="Decrease font size"
+              >
+                <Icon icon="mdi:minus" width="16" height="16" aria-hidden="true" />
+              </button>
+              <input
+                type="number"
+                inputMode="numeric"
+                className={`form-control form-control-sm font-size-input ${mode === 'dark' ? 'bg-dark text-white border-secondary' : ''}`}
+                min={MIN_FONT_SIZE}
+                max={MAX_FONT_SIZE}
+                value={sizeDraft ?? textStyle.fontSize}
+                onChange={(e) => setSizeDraft(e.target.value)}
+                onBlur={commitSizeDraft}
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); commitSizeDraft(); } }}
+                aria-label="Font size in pixels"
+                title={`Font size (${MIN_FONT_SIZE}-${MAX_FONT_SIZE}px)`}
+              />
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-secondary"
+                onClick={() => changeFontSize(textStyle.fontSize + 1)}
+                disabled={textStyle.fontSize >= MAX_FONT_SIZE}
+                aria-label="Increase font size"
+                title="Increase font size"
+              >
+                <Icon icon="mdi:plus" width="16" height="16" aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                aria-label="Choose a preset font size"
+                title="Preset sizes"
+              ></button>
+              <ul className={`dropdown-menu dropdown-menu-end font-size-menu${mode === 'dark' ? 'dropdown-menu-dark' : ''}`}>
+                {FONT_SIZE_PRESETS.map(size => (
+                  <li key={size}>
+                    <button
+                      type="button"
+                      className={`dropdown-item ${textStyle.fontSize === size ? 'active' : ''}`}
+                      onClick={() => changeFontSize(size)}
+                    >
+                      {size}px
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-secondary"
+              onClick={resetStyle}
+              aria-label="Reset text style"
+              title="Reset text style"
+            >
+              <Icon icon="mdi:format-clear" width="18" height="18" aria-hidden="true" />
+            </button>
+          </div>
           <div
             className={`drag-drop-zone ${isDragOver ? 'drag-over' : ''}`}
             onDragOver={handleDragOver}
@@ -560,7 +706,7 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
               placeholder="Type, paste, or drag & drop a file here..."
               value={text}
               onChange={(e) => setText(e.target.value)}
-              style={{ backgroundColor: mode === 'dark' ? '#74747400' : 'white', color: mode === 'dark' ? 'white' : 'black' }}
+              style={{ backgroundColor: mode === 'dark' ? '#74747400' : 'white', color: mode === 'dark' ? 'white' : 'black', ...textStyleCss }}
             />
             {isDragOver && (
               <div className="drag-overlay">
@@ -758,7 +904,7 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
 
         <hr className="my-4" />
         <h4 className="mb-3 heading-animated">Preview</h4>
-        <div className={`preview-container ${mode === 'dark' ? 'dark-mode' : ''}`}>
+        <div className={`preview-container ${mode === 'dark' ? 'dark-mode' : ''}`} style={textStyleCss}>
           {text.length > 0 ? text : 'Nothing to preview.'}
         </div>
         <hr className="my-4" />
@@ -857,6 +1003,14 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
                 <span className="shortcut-desc">Redo (Alt)</span>
               </div>
               <div className="shortcut-row">
+                <span className="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>B</kbd></span>
+                <span className="shortcut-desc">Bold</span>
+              </div>
+              <div className="shortcut-row">
+                <span className="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>I</kbd></span>
+                <span className="shortcut-desc">Italic</span>
+              </div>
+              <div className="shortcut-row">
                 <span className="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>H</kbd></span>
                 <span className="shortcut-desc">Find & Replace</span>
               </div>
@@ -866,7 +1020,7 @@ const Textbox: React.FC<TextboxProps> = ({ heading, mode }) => {
               </div>
             </div>
             <div className="shortcuts-footer">
-              <small>Shortcuts work when the text area is not focused</small>
+              <small>Undo/Redo work when the text area is not focused</small>
             </div>
           </div>
         </div>

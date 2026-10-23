@@ -1,10 +1,16 @@
 import { Document, Packer, Paragraph, TextRun } from 'docx';
 import { saveAs } from 'file-saver';
 
+export interface TextFormat {
+  bold: boolean;
+  italic: boolean;
+  fontSize: number; // CSS px
+}
+
 /**
  * Exports text as a DOCX (Word) document
  */
-export const exportAsDocx = async (text: string, filename: string = 'document.docx'): Promise<void> => {
+export const exportAsDocx = async (text: string, filename: string = 'document.docx', format?: TextFormat): Promise<void> => {
   try {
     // Split text into paragraphs
     const paragraphs = text.split('\n').map(line => {
@@ -21,7 +27,10 @@ export const exportAsDocx = async (text: string, filename: string = 'document.do
         children: [
           new TextRun({
             text: line,
-            size: 24, // 12pt font (size is in half-points)
+            // docx size is in half-points; 1 CSS px = 0.75pt
+            size: format ? Math.round(format.fontSize * 1.5) : 24,
+            bold: format?.bold,
+            italics: format?.italic,
           }),
         ],
         spacing: { after: 120 } // Add spacing between paragraphs
